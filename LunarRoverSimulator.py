@@ -66,6 +66,101 @@ def preparation_phase():
     print("Transitioning to navigation control...\n")
     input("Press ENTER to continue...")
 
+def navigation_phase():
+    clear_screen()
+    print("\n=== GRID NAVIGATION CONTROL ===")
+    
+    # 1. GAME STATE (Coordinates [row, column])
+    rows = 5
+    cols = 5
+    rover_position = [0, 0]    # Rover starts in the top-left corner
+    target_position = [4, 4]   # Target is in the bottom-right corner
+    
+    # List of obstacles (craters, rocks, etc.)
+    obstacles = [[0, 3], [1, 1], [2, 3], [3, 0], [4, 2]] 
+    
+    rover_reached_destination = False
+    
+    while not rover_reached_destination:
+        clear_screen()
+        
+        print("\nLunar Sector Map:")
+        
+        # 2. DRAWING THE MAP
+        # This loop scans all rows and columns
+        for r in range(rows):
+            drawn_row = ""
+            for c in range(cols):
+                current_coord = [r, c]
+                
+                if current_coord == rover_position:
+                    drawn_row += "[R]"
+                elif current_coord == target_position:
+                    drawn_row += "[O]"
+                elif current_coord in obstacles:
+                    drawn_row += "[X]"
+                else:
+                    drawn_row += "[ ]" # Empty terrain
+            
+            print(drawn_row)
+            
+        # 3. WIN CONDITION
+        if rover_position == target_position:
+            print("\nTarget reached!")
+            print("Navigation mission completed.\n")
+            rover_reached_destination = True
+            break
+        
+        # 4. RECEIVING THE COMMAND
+        command = input("\nNavigation command (w/a/s/d or 'help'): ").lower()
+        
+        if command == "help":
+            print("\nCommands:")
+            print("- w : UP")
+            print("- s : DOWN")
+            print("- a : LEFT")
+            print("- d : RIGHT")
+            input("\nPress ENTER to return to the map...")
+            continue # Skips the rest of the code and goes back to the start of the 'while'
+            
+        # 5. CALCULATING THE NEXT POSITION (without moving yet)
+        new_row = rover_position[0]
+        new_col = rover_position[1]
+        
+        if command == "w":
+            new_row -= 1   # Moves up one row
+        elif command == "s":
+            new_row += 1   # Moves down one row
+        elif command == "a":
+            new_col -= 1   # Moves left one column
+        elif command == "d":
+            new_col += 1   # Moves right one column
+        else:
+            print("\n[ERROR] Invalid navigation command.")
+            input("Press ENTER to try again...")
+            continue
+            
+        # 6. COLLISION AND LIMITS SYSTEM
+        new_position = [new_row, new_col]
+        
+        # Checks if the new position is outside the map (less than 0 or greater than the limit)
+        hit_wall = (new_row < 0 or new_row >= rows or new_col < 0 or new_col >= cols)
+        
+        # Checks if the exact new position is in the list of obstacles
+        hit_obstacle = new_position in obstacles
+        
+        if hit_wall:
+            print("\n[SYSTEM ALERT] Movement blocked: Lunar sector limit reached.")
+            input("Press ENTER to recalculate route...")
+        elif hit_obstacle:
+            print("\n[SYSTEM ALERT] Collision risk: Crater/Obstacle detected on the route.")
+            input("Press ENTER to recalculate route...")
+        else:
+            # If it didn't hit a wall and didn't hit an obstacle, the movement is approved!
+            rover_position = new_position
+            
+    input("Press ENTER to proceed to the shutdown procedure...")
+
 def shutdown_phase():
     clear_screen()
     print("\n=== SHUTDOWN PROCEDURE ===")
