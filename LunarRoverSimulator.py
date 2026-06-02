@@ -32,6 +32,40 @@ def briefing_phase():
     print("======================================================\n")
     input("\nPress ENTER to start the system...")
 
+def preparation_phase():
+    clear_screen()
+    print("\n=== ROVER INITIALIZATION SYSTEM ===")
+    status = "OFF"
+    
+    while status != "READY_TO_MOVE":
+        print(f"\n[Status: {status}]")
+        command = input(f"Enter a command ('help' to list): ").lower()
+        
+        if command == "help":
+            print("\nAvailable commands:")
+            print("- calibrate    : Initiates the calibration of the rover's steering systems.")
+            print("- start_engine : Starts the main engine (requires prior calibration).")
+            print("- help         : Displays this list of commands.")
+            
+        elif command == "calibrate":
+            print("\nCalibrating steering systems... 100%")
+            status = "CALIBRATED"
+            
+        elif command == "start_engine":
+            if status == "CALIBRATED":
+                print("\nEngine started successfully! Systems online.")
+                status = "READY_TO_MOVE"
+            else:
+                print("\nSECURITY ERROR")
+                print("You must calibrate the systems before starting the engine.")
+                
+        else:
+            print("Command not recognized by the system. Type 'help' for assistance.")
+            
+    print("\n[ SYSTEM READY ]")
+    print("Transitioning to navigation control...\n")
+    input("Press ENTER to continue...")
+
 def debriefing_phase():
     clear_screen()
     print("\n=============================================================")
