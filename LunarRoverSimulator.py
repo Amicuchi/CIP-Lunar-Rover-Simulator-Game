@@ -66,6 +66,39 @@ def preparation_phase():
     print("Transitioning to navigation control...\n")
     input("Press ENTER to continue...")
 
+def shutdown_phase():
+    clear_screen()
+    print("\n=== SHUTDOWN PROCEDURE ===")
+    engine_running = True
+    status_verified = False
+    
+    while engine_running:
+        command = input("\nEnter a command ('status' or 'shutdown_engine'): ").lower()
+        
+        if command == "status":
+            print("\nChecking telemetry...")
+            print("Engine rotation: Idle.")
+            print("Temperature: Stable.")
+            print("\n[ SAFE FOR SHUTDOWN ]")
+            status_verified = True
+            
+        elif command == "shutdown_engine":
+            if status_verified:
+                print("\nShutting down engine... ")
+                print("System static.")
+                print("\nOperation completed safely.")
+                engine_running = False
+            else:
+                print("\n[ PROTOCOL ERROR ]")
+                print("\nIt is mandatory to verify the engine 'status' before authorizing shutdown.")
+                print("Always remember this because it will be vital when the rover is on the moon.")
+        else:
+            print("\n[ INVALID COMMAND ]")
+            print("\nThe engine continues to operate.")
+            
+    print("\n[ SYSTEM SHUTDOWN ]\n")
+    input("Press ENTER to read the final mission report...")
+
 def debriefing_phase():
     clear_screen()
     print("\n=============================================================")
