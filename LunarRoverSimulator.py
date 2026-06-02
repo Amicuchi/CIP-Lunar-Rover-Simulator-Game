@@ -206,6 +206,9 @@ def debriefing_phase():
 
 def main():
     briefing_phase()
+    preparation_phase()
+    navigation_phase()
+    shutdown_phase()
     debriefing_phase()
 
 if __name__ == "__main__":
